@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Night Selector</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="aurora aurora-a"></div>
+    <div class="aurora aurora-b"></div>
+
+    <main class="layout">
+      <header class="hero">
+        <h1>Game Night Selector</h1>
+        <p>
+          Everyone drops suggestions, matching ideas get spotlighted, then you all vote on the winner.
+        </p>
+        <div class="stats">
+          <span id="participantCount">0 players online</span>
+        </div>
+      </header>
+
+      <section class="panel join-panel">
+        <h2>Your Name</h2>
+        <form id="joinForm" class="inline-form">
+          <input id="nameInput" type="text" maxlength="40" placeholder="Type your name" required />
+          <button type="submit">Join Session</button>
+        </form>
+        <p id="joinStatus" class="muted">Join to start suggesting and voting.</p>
+      </section>
+
+      <section class="panel suggestion-panel">
+        <h2>Suggest a Game</h2>
+        <form id="suggestionForm" class="inline-form">
+          <input id="gameInput" type="text" maxlength="80" placeholder="Example: Rocket League" required />
+          <button type="submit">Add Suggestion</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Matched Ideas + Voting</h2>
+        <div id="ideas" class="ideas"></div>
+      </section>
+
+      <section class="panel">
+        <h2>All Submissions</h2>
+        <div id="submissions" class="submissions"></div>
+      </section>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
