@@ -8,6 +8,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const PORT = process.env.PORT || 3000;
+const ADMIN_NAME = "Frogi";
 
 const clients = new Map();
 const suggestions = [];
@@ -31,6 +32,10 @@ function cleanupVotes() {
 }
 
 function buildStateForClient(requesterId) {
+  const requesterClient = requesterId
+    ? Array.from(clients.values()).find((client) => client.clientId === requesterId)
+    : null;
+
   const grouped = new Map();
 
   for (const entry of suggestions) {
@@ -91,6 +96,7 @@ function buildStateForClient(requesterId) {
   return {
     participants: participantNames,
     participantCount: participantNames.length,
+    isAdmin: requesterClient ? requesterClient.name === ADMIN_NAME : false,
     ideas,
     submissions,
   };
@@ -167,6 +173,17 @@ io.on("connection", (socket) => {
       set.add(client.clientId);
     }
 
+    emitAllStates();
+  });
+
+  socket.on("admin:clear-submissions", () => {
+    const client = clients.get(socket.id);
+    if (!client || client.name !== ADMIN_NAME) {
+      return;
+    }
+
+    suggestions.length = 0;
+    votesByIdea.clear();
     emitAllStates();
   });
 

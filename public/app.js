@@ -8,11 +8,14 @@ const joinStatus = document.getElementById("joinStatus");
 const participantCount = document.getElementById("participantCount");
 const ideasEl = document.getElementById("ideas");
 const submissionsEl = document.getElementById("submissions");
+const adminControls = document.getElementById("adminControls");
+const clearSubmissionsBtn = document.getElementById("clearSubmissionsBtn");
 
 const storedName = localStorage.getItem("game-selector-name") || "";
 const clientId = getOrCreateClientId();
 
 let me = storedName;
+let isAdmin = false;
 
 if (storedName) {
   nameInput.value = storedName;
@@ -27,6 +30,15 @@ socket.on("connect", () => {
 
 socket.on("state:update", (state) => {
   renderState(state);
+});
+
+clearSubmissionsBtn.addEventListener("click", () => {
+  if (!isAdmin) {
+    return;
+  }
+
+  socket.emit("admin:clear-submissions");
+  setJoinStatus("All submissions were cleared.");
 });
 
 joinForm.addEventListener("submit", (event) => {
@@ -63,6 +75,8 @@ suggestionForm.addEventListener("submit", (event) => {
 });
 
 function renderState(state) {
+  isAdmin = !!state.isAdmin;
+  adminControls.classList.toggle("hidden", !isAdmin);
   participantCount.textContent = `${state.participantCount} players online`;
   renderIdeas(state.ideas);
   renderSubmissions(state.submissions);

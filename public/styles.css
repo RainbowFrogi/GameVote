@@ -159,6 +159,18 @@ button:disabled {
   gap: 0.65rem;
 }
 
+.admin-controls {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.hidden {
+  display: none;
+}
+
 .idea,
 .submission {
   border: 1px solid var(--line);
